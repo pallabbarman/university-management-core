@@ -1,10 +1,8 @@
-import { SortOrder } from 'mongoose';
-
 export interface IPaginationOptions {
     page?: number;
     limit?: number;
     sortBy?: string;
-    sortOrder?: SortOrder;
+    sortOrder?: 'asc' | 'desc';
 }
 
 export interface IPaginationOptionsResult {
@@ -12,5 +10,5 @@ export interface IPaginationOptionsResult {
     limit: number;
     skip: number;
     sortBy: string;
-    sortOrder: SortOrder;
+    sortOrder: 'asc' | 'desc';
 }
