@@ -5,7 +5,7 @@ import ApiError from 'errors/apiError';
 import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { Secret } from 'jsonwebtoken';
-import { verifyToken } from 'utils/jwtGenerator';
+import { verifyToken } from 'utils/jwt';
 
 const auth =
     (...roles: string[]) =>

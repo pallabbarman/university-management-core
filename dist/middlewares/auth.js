@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = __importDefault(require("../configs/index"));
 const apiError_1 = __importDefault(require("../errors/apiError"));
 const http_status_1 = __importDefault(require("http-status"));
-const jwtGenerator_1 = require("../utils/jwtGenerator");
+const jwt_1 = require("../utils/jwt");
 const auth = (...roles) => async (req, res, next) => {
     try {
         // get authorization token
@@ -18,7 +18,7 @@ const auth = (...roles) => async (req, res, next) => {
         }
         // verify token
         let verifiedUser = null;
-        verifiedUser = (0, jwtGenerator_1.verifyToken)(token, index_1.default.jwt.secret);
+        verifiedUser = (0, jwt_1.verifyToken)(token, index_1.default.jwt.secret);
         req.user = verifiedUser; // role , userId
         if (roles.length && !roles.includes(verifiedUser.role)) {
             throw new apiError_1.default(http_status_1.default.FORBIDDEN, 'Forbidden');

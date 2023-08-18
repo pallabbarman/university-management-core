@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findAllSemesters = exports.insertSemester = void 0;
+exports.findSemester = exports.findAllSemesters = exports.insertSemester = void 0;
 const pagination_1 = __importDefault(require("../../utils/pagination"));
 const prisma_1 = __importDefault(require("../../utils/prisma"));
 const constant_1 = require("./constant");
@@ -61,3 +61,12 @@ const findAllSemesters = async (filters, options) => {
     };
 };
 exports.findAllSemesters = findAllSemesters;
+const findSemester = async (id) => {
+    const result = await prisma_1.default.semester.findUnique({
+        where: {
+            id,
+        },
+    });
+    return result;
+};
+exports.findSemester = findSemester;
