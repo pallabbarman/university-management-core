@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "outDir": "dist",
+        "rootDir": "src",
+        "esModuleInterop": true,
+        "strict": true,
+        "baseUrl": "./src",
+        "paths": {
+            "configs/*": ["configs/*"],
+            "constants/*": ["constants/*"],
+            "errors/*": ["errors/*"],
+            "middlewares/*": ["middlewares/*"],
+            "modules/*": ["modules/*"],
+            "routes/*": ["routes/*"],
+            "types/*": ["types/*"],
+            "utils/*": ["utils/*"]
+        }
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]
+}
