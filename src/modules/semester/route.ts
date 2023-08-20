@@ -9,4 +9,6 @@ router.get('/', getAllSemesters);
 router.get('/:id', getSemester);
 router.post('/create-semester', validateRequest(semesterValidation), createSemester);
 
-export default router;
+const semesterRoutes = router;
+
+export default semesterRoutes;

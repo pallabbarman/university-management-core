@@ -46,7 +46,7 @@ model Department {
   faculties         Faculty[]
   academicFaculty   AcademicFaculty @relation(fields: [academicFacultyId], references: [id])
 
-  @@map("Department ")
+  @@map("departments")
 }
 
 model Student {

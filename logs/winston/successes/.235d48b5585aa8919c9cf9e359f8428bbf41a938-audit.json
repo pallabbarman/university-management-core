@@ -1,0 +1,20 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 7
+    },
+    "auditLog": "D:\\Pallab\\university-management-core\\logs\\winston\\successes\\.235d48b5585aa8919c9cf9e359f8428bbf41a938-audit.json",
+    "files": [
+        {
+            "date": 1692502577754,
+            "name": "D:\\Pallab\\university-management-core\\logs\\winston\\successes\\success-2023-08-20-09.log",
+            "hash": "2d8340ceb1ab69228d982bcccbb108d74295399a5e494717cce29065966135c3"
+        },
+        {
+            "date": 1692504058933,
+            "name": "D:\\Pallab\\university-management-core\\logs\\winston\\successes\\success-2023-08-20-10.log",
+            "hash": "8129d541fc309340cc244e2c7270c781783947f73781501df12aaf43e24328ce"
+        }
+    ],
+    "hashType": "sha256"
+}

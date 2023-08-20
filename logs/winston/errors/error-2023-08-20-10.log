@@ -1,0 +1,12 @@
+Sun Aug 20 2023 10:17:24 [debug] error: globalErrorHandler ~ [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      "title"
+    ],
+    "message": "Title is required!"
+  }
+]
