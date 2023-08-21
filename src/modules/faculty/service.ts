@@ -1,42 +1,43 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable comma-dangle */
-/* eslint-disable operator-linebreak */
 /* eslint-disable object-curly-newline */
-import { Department, Prisma } from '@prisma/client';
+/* eslint-disable operator-linebreak */
+/* eslint-disable comma-dangle */
+import { Faculty, Prisma } from '@prisma/client';
 import { IPaginationOptions } from 'types/pagination';
 import { IGenericResponse } from 'types/response';
 import calculatePagination from 'utils/pagination';
 import prisma from 'utils/prisma';
 import {
-    departmentRelationalFields,
-    departmentRelationalFieldsMapper,
-    departmentSearchableFields,
+    facultyRelationalFields,
+    facultyRelationalFieldsMapper,
+    facultySearchableFields,
 } from './constant';
-import { IDepartmentFilter } from './interface';
+import { IFacultyFilters } from './interface';
 
-export const insertDepartment = async (data: Department): Promise<Department> => {
-    const result = await prisma.department.create({
+export const insertFaculty = async (data: Faculty): Promise<Faculty> => {
+    const result = await prisma.faculty.create({
         data,
         include: {
             academicFaculty: true,
+            department: true,
         },
     });
 
     return result;
 };
 
-export const findAllDepartments = async (
-    filters: IDepartmentFilter,
+export const findAllFaculties = async (
+    filters: IFacultyFilters,
     options: IPaginationOptions
-): Promise<IGenericResponse<Department[]>> => {
-    const { limit, page, skip, sortBy, sortOrder } = calculatePagination(options);
+): Promise<IGenericResponse<Faculty[]>> => {
     const { searchTerm, ...filterData } = filters;
+    const { limit, page, skip, sortBy, sortOrder } = calculatePagination(options);
 
     const andConditions = [];
 
     if (searchTerm) {
         andConditions.push({
-            OR: departmentSearchableFields.map((field) => ({
+            OR: facultySearchableFields.map((field) => ({
                 [field]: {
                     contains: searchTerm,
                     mode: 'insensitive',
@@ -48,9 +49,9 @@ export const findAllDepartments = async (
     if (Object.keys(filterData).length > 0) {
         andConditions.push({
             AND: Object.keys(filterData).map((key) => {
-                if (departmentRelationalFields.includes(key)) {
+                if (facultyRelationalFields.includes(key)) {
                     return {
-                        [departmentRelationalFieldsMapper[key]]: {
+                        [facultyRelationalFieldsMapper[key]]: {
                             id: (filterData as any)[key],
                         },
                     };
@@ -64,12 +65,13 @@ export const findAllDepartments = async (
         });
     }
 
-    const whereConditions: Prisma.DepartmentWhereInput =
+    const whereConditions: Prisma.FacultyWhereInput =
         andConditions.length > 0 ? { AND: andConditions } : {};
 
-    const result = await prisma.department.findMany({
+    const result = await prisma.faculty.findMany({
         include: {
             academicFaculty: true,
+            department: true,
         },
         where: whereConditions,
         skip,
@@ -82,7 +84,7 @@ export const findAllDepartments = async (
                   },
     });
 
-    const total = await prisma.department.count({
+    const total = await prisma.faculty.count({
         where: whereConditions,
     });
 
@@ -96,11 +98,14 @@ export const findAllDepartments = async (
     };
 };
 
-export const findDepartment = async (id: string): Promise<Department | null> => {
-    const result = await prisma.department.findUnique({
-        where: { id },
+export const findFaculty = async (id: string): Promise<Faculty | null> => {
+    const result = await prisma.faculty.findUnique({
+        where: {
+            id,
+        },
         include: {
             academicFaculty: true,
+            department: true,
         },
     });
 
