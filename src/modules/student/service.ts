@@ -114,3 +114,34 @@ export const findStudent = async (id: string): Promise<Student | null> => {
 
     return result;
 };
+
+export const editStudent = async (id: string, payload: Partial<Student>): Promise<Student> => {
+    const result = await prisma.student.update({
+        where: {
+            id,
+        },
+        data: payload,
+        include: {
+            academicFaculty: true,
+            department: true,
+            semester: true,
+        },
+    });
+
+    return result;
+};
+
+export const removeStudent = async (id: string): Promise<Student> => {
+    const result = await prisma.student.delete({
+        where: {
+            id,
+        },
+        include: {
+            academicFaculty: true,
+            department: true,
+            semester: true,
+        },
+    });
+
+    return result;
+};

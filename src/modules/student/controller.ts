@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 import paginationFields from 'constants/pagination';
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
@@ -5,7 +6,7 @@ import catchAsync from 'utils/catchAsync';
 import pick from 'utils/pick';
 import sendResponse from 'utils/sendResponse';
 import { studentFilterableFields } from './constant';
-import { findAllStudents, findStudent, insertStudent } from './service';
+import { editStudent, findAllStudents, findStudent, insertStudent, removeStudent } from './service';
 
 export const createStudent = catchAsync(async (req: Request, res: Response) => {
     const result = await insertStudent(req.body);
@@ -41,6 +42,30 @@ export const getStudent = catchAsync(async (req: Request, res: Response) => {
         statusCode: httpStatus.OK,
         success: true,
         message: 'Student is retrieved successfully!',
+        data: result,
+    });
+});
+
+export const updateStudent = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params?.id;
+    const result = await editStudent(id, req.body);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Student is updated successfully!',
+        data: result,
+    });
+});
+
+export const deleteStudent = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params?.id;
+    const result = await removeStudent(id);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Student is deleted successfully!',
         data: result,
     });
 });

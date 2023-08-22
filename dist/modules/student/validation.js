@@ -1,10 +1,9 @@
 "use strict";
-/* eslint-disable import/prefer-default-export */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.studentValidation = void 0;
+exports.updateStudentValidation = exports.studentValidation = void 0;
 const zod_1 = __importDefault(require("zod"));
 exports.studentValidation = zod_1.default.object({
     body: zod_1.default.object({
@@ -44,5 +43,21 @@ exports.studentValidation = zod_1.default.object({
         academicFacultyId: zod_1.default.string({
             required_error: 'Academic faculty is required',
         }),
+    }),
+});
+exports.updateStudentValidation = zod_1.default.object({
+    body: zod_1.default.object({
+        studentId: zod_1.default.string().optional(),
+        firstName: zod_1.default.string().optional(),
+        lastName: zod_1.default.string().optional(),
+        middleName: zod_1.default.string().optional(),
+        profileImage: zod_1.default.string().optional(),
+        email: zod_1.default.string().optional(),
+        contactNo: zod_1.default.string().optional(),
+        gender: zod_1.default.string().optional(),
+        bloodGroup: zod_1.default.string().optional(),
+        semesterId: zod_1.default.string().optional(),
+        departmentId: zod_1.default.string().optional(),
+        academicFacultyId: zod_1.default.string().optional(),
     }),
 });

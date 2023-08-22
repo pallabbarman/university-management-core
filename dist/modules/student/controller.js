@@ -3,7 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getStudent = exports.getAllStudents = exports.createStudent = void 0;
+exports.deleteStudent = exports.updateStudent = exports.getStudent = exports.getAllStudents = exports.createStudent = void 0;
+/* eslint-disable object-curly-newline */
 const pagination_1 = __importDefault(require("../../constants/pagination"));
 const http_status_1 = __importDefault(require("http-status"));
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
@@ -39,6 +40,26 @@ exports.getStudent = (0, catchAsync_1.default)(async (req, res) => {
         statusCode: http_status_1.default.OK,
         success: true,
         message: 'Student is retrieved successfully!',
+        data: result,
+    });
+});
+exports.updateStudent = (0, catchAsync_1.default)(async (req, res) => {
+    const id = req.params?.id;
+    const result = await (0, service_1.editStudent)(id, req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Student is updated successfully!',
+        data: result,
+    });
+});
+exports.deleteStudent = (0, catchAsync_1.default)(async (req, res) => {
+    const id = req.params?.id;
+    const result = await (0, service_1.removeStudent)(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Student is deleted successfully!',
         data: result,
     });
 });
