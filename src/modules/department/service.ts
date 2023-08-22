@@ -88,9 +88,9 @@ export const findAllDepartments = async (
 
     return {
         meta: {
-            total,
             page,
             limit,
+            total,
         },
         data: result,
     };

@@ -69,7 +69,7 @@ export const findAllSemesters = async (
     return {
         meta: {
             page,
-            limit: 10,
+            limit,
             total,
         },
         data: result,

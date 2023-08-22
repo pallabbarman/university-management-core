@@ -8,8 +8,8 @@ const validateRequest_1 = __importDefault(require("../../middlewares/validateReq
 const controller_1 = require("./controller");
 const validation_1 = require("./validation");
 const router = (0, express_1.Router)();
-router.get('/', controller_1.getAllDepartments);
-router.get('/:id', controller_1.getDepartment);
-router.post('/create-department', (0, validateRequest_1.default)(validation_1.departmentValidation), controller_1.createDepartment);
+router.get('/id', controller_1.getAllFaculties);
+router.get('/:id', controller_1.getFaculty);
+router.post('/create-faculty', (0, validateRequest_1.default)(validation_1.facultyValidation), controller_1.createFaculty);
 const departmentRoutes = router;
 exports.default = departmentRoutes;

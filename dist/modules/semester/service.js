@@ -54,7 +54,7 @@ const findAllSemesters = async (filters, options) => {
     return {
         meta: {
             page,
-            limit: 10,
+            limit,
             total,
         },
         data: result,

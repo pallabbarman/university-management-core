@@ -3,27 +3,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findDepartment = exports.findAllDepartments = exports.insertDepartment = void 0;
+exports.findStudent = exports.findAllStudents = exports.insertStudent = void 0;
 const pagination_1 = __importDefault(require("../../utils/pagination"));
 const prisma_1 = __importDefault(require("../../utils/prisma"));
 const constant_1 = require("./constant");
-const insertDepartment = async (data) => {
-    const result = await prisma_1.default.department.create({
+const insertStudent = async (data) => {
+    const result = await prisma_1.default.student.create({
         data,
         include: {
             academicFaculty: true,
+            department: true,
+            semester: true,
         },
     });
     return result;
 };
-exports.insertDepartment = insertDepartment;
-const findAllDepartments = async (filters, options) => {
+exports.insertStudent = insertStudent;
+const findAllStudents = async (filters, options) => {
     const { limit, page, skip, sortBy, sortOrder } = (0, pagination_1.default)(options);
     const { searchTerm, ...filterData } = filters;
     const andConditions = [];
     if (searchTerm) {
         andConditions.push({
-            OR: constant_1.departmentSearchableFields.map((field) => ({
+            OR: constant_1.studentSearchableFields.map((field) => ({
                 [field]: {
                     contains: searchTerm,
                     mode: 'insensitive',
@@ -34,9 +36,9 @@ const findAllDepartments = async (filters, options) => {
     if (Object.keys(filterData).length > 0) {
         andConditions.push({
             AND: Object.keys(filterData).map((key) => {
-                if (constant_1.departmentRelationalFields.includes(key)) {
+                if (constant_1.studentRelationalFields.includes(key)) {
                     return {
-                        [constant_1.departmentRelationalFieldsMapper[key]]: {
+                        [constant_1.studentRelationalFieldsMapper[key]]: {
                             id: filterData[key],
                         },
                     };
@@ -50,9 +52,11 @@ const findAllDepartments = async (filters, options) => {
         });
     }
     const whereConditions = andConditions.length > 0 ? { AND: andConditions } : {};
-    const result = await prisma_1.default.department.findMany({
+    const result = await prisma_1.default.student.findMany({
         include: {
             academicFaculty: true,
+            department: true,
+            semester: true,
         },
         where: whereConditions,
         skip,
@@ -63,7 +67,7 @@ const findAllDepartments = async (filters, options) => {
                 createdAt: 'desc',
             },
     });
-    const total = await prisma_1.default.department.count({
+    const total = await prisma_1.default.student.count({
         where: whereConditions,
     });
     return {
@@ -75,14 +79,18 @@ const findAllDepartments = async (filters, options) => {
         data: result,
     };
 };
-exports.findAllDepartments = findAllDepartments;
-const findDepartment = async (id) => {
-    const result = await prisma_1.default.department.findUnique({
-        where: { id },
+exports.findAllStudents = findAllStudents;
+const findStudent = async (id) => {
+    const result = await prisma_1.default.student.findUnique({
+        where: {
+            id,
+        },
         include: {
             academicFaculty: true,
+            department: true,
+            semester: true,
         },
     });
     return result;
 };
-exports.findDepartment = findDepartment;
+exports.findStudent = findStudent;

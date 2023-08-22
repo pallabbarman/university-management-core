@@ -1,43 +1,44 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable comma-dangle */
 /* eslint-disable object-curly-newline */
 /* eslint-disable operator-linebreak */
-/* eslint-disable comma-dangle */
-import { Faculty, Prisma } from '@prisma/client';
+import { Prisma, Student } from '@prisma/client';
 import { IPaginationOptions } from 'types/pagination';
 import { IGenericResponse } from 'types/response';
 import calculatePagination from 'utils/pagination';
 import prisma from 'utils/prisma';
 import {
-    facultyRelationalFields,
-    facultyRelationalFieldsMapper,
-    facultySearchableFields,
+    studentRelationalFields,
+    studentRelationalFieldsMapper,
+    studentSearchableFields,
 } from './constant';
-import { IFacultyFilters } from './interface';
+import { IStudentFilter } from './interface';
 
-export const insertFaculty = async (data: Faculty): Promise<Faculty> => {
-    const result = await prisma.faculty.create({
+export const insertStudent = async (data: Student): Promise<Student> => {
+    const result = await prisma.student.create({
         data,
         include: {
             academicFaculty: true,
             department: true,
+            semester: true,
         },
     });
 
     return result;
 };
 
-export const findAllFaculties = async (
-    filters: IFacultyFilters,
+export const findAllStudents = async (
+    filters: IStudentFilter,
     options: IPaginationOptions
-): Promise<IGenericResponse<Faculty[]>> => {
-    const { searchTerm, ...filterData } = filters;
+): Promise<IGenericResponse<Student[]>> => {
     const { limit, page, skip, sortBy, sortOrder } = calculatePagination(options);
+    const { searchTerm, ...filterData } = filters;
 
     const andConditions = [];
 
     if (searchTerm) {
         andConditions.push({
-            OR: facultySearchableFields.map((field) => ({
+            OR: studentSearchableFields.map((field) => ({
                 [field]: {
                     contains: searchTerm,
                     mode: 'insensitive',
@@ -49,9 +50,9 @@ export const findAllFaculties = async (
     if (Object.keys(filterData).length > 0) {
         andConditions.push({
             AND: Object.keys(filterData).map((key) => {
-                if (facultyRelationalFields.includes(key)) {
+                if (studentRelationalFields.includes(key)) {
                     return {
-                        [facultyRelationalFieldsMapper[key]]: {
+                        [studentRelationalFieldsMapper[key]]: {
                             id: (filterData as any)[key],
                         },
                     };
@@ -65,13 +66,14 @@ export const findAllFaculties = async (
         });
     }
 
-    const whereConditions: Prisma.FacultyWhereInput =
+    const whereConditions: Prisma.StudentWhereInput =
         andConditions.length > 0 ? { AND: andConditions } : {};
 
-    const result = await prisma.faculty.findMany({
+    const result = await prisma.student.findMany({
         include: {
             academicFaculty: true,
             department: true,
+            semester: true,
         },
         where: whereConditions,
         skip,
@@ -84,7 +86,7 @@ export const findAllFaculties = async (
                   },
     });
 
-    const total = await prisma.faculty.count({
+    const total = await prisma.student.count({
         where: whereConditions,
     });
 
@@ -98,14 +100,15 @@ export const findAllFaculties = async (
     };
 };
 
-export const findFaculty = async (id: string): Promise<Faculty | null> => {
-    const result = await prisma.faculty.findUnique({
+export const findStudent = async (id: string): Promise<Student | null> => {
+    const result = await prisma.student.findUnique({
         where: {
             id,
         },
         include: {
             academicFaculty: true,
             department: true,
+            semester: true,
         },
     });
 

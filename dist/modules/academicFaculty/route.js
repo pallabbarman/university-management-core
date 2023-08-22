@@ -9,6 +9,8 @@ const validateRequest_1 = __importDefault(require("../../middlewares/validateReq
 const controller_1 = require("./controller");
 const validation_1 = require("./validation");
 const router = (0, express_1.Router)();
+router.get('/', controller_1.getAllAcademicFaculties);
+router.get('/:id', controller_1.getAcademicFaculty);
 router.post('/create-academic-faculty', (0, validateRequest_1.default)(validation_1.academicFacultyValidation), controller_1.createAcademicFaculty);
 const academicFacultyRoutes = router;
 exports.default = academicFacultyRoutes;
