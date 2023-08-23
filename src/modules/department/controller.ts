@@ -6,7 +6,13 @@ import catchAsync from 'utils/catchAsync';
 import pick from 'utils/pick';
 import sendResponse from 'utils/sendResponse';
 import { departmentFilterableFields } from './constant';
-import { findAllDepartments, findDepartment, insertDepartment } from './service';
+import {
+    editDepartment,
+    findAllDepartments,
+    findDepartment,
+    insertDepartment,
+    removeDepartment,
+} from './service';
 
 export const createDepartment = catchAsync(async (req: Request, res: Response) => {
     const result = await insertDepartment(req.body);
@@ -25,7 +31,7 @@ export const getAllDepartments = catchAsync(async (req: Request, res: Response) 
 
     const result = await findAllDepartments(filters, options);
 
-    sendResponse(res, {
+    sendResponse<Department[]>(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: 'Departments is retrieved successfully!',
@@ -42,6 +48,30 @@ export const getDepartment = catchAsync(async (req: Request, res: Response) => {
         statusCode: httpStatus.OK,
         success: true,
         message: 'Department is retrieved successfully!',
+        data: result,
+    });
+});
+
+export const updateDepartment = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params?.id;
+    const result = await editDepartment(id, req.body);
+
+    sendResponse<Department>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Department is updated successfully!',
+        data: result,
+    });
+});
+
+export const deleteDepartment = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params?.id;
+    const result = await removeDepartment(id);
+
+    sendResponse<Department>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Department deleted successfully!',
         data: result,
     });
 });

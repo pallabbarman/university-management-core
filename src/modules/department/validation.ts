@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import z from 'zod';
 
 export const departmentValidation = z.object({
@@ -9,5 +8,12 @@ export const departmentValidation = z.object({
         academicFacultyId: z.string({
             required_error: 'Academic faculty id is required!',
         }),
+    }),
+});
+
+export const updateDepartmentValidation = z.object({
+    body: z.object({
+        title: z.string().optional(),
+        academicFacultyId: z.string().optional(),
     }),
 });

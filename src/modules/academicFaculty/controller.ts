@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { AcademicFaculty } from '@prisma/client';
 import paginationFields from 'constants/pagination';
 import { Request, Response } from 'express';
@@ -7,7 +6,13 @@ import catchAsync from 'utils/catchAsync';
 import pick from 'utils/pick';
 import sendResponse from 'utils/sendResponse';
 import { academicFacultyFilterableFields } from './constant';
-import { findAcademicFaculty, findAllAcademicFaculties, insertAcademicFaculty } from './service';
+import {
+    editAcademicFaculty,
+    findAcademicFaculty,
+    findAllAcademicFaculties,
+    insertAcademicFaculty,
+    removeAcademicFaculty,
+} from './service';
 
 export const createAcademicFaculty = catchAsync(async (req: Request, res: Response) => {
     const result = await insertAcademicFaculty(req.body);
@@ -26,7 +31,7 @@ export const getAllAcademicFaculties = catchAsync(async (req: Request, res: Resp
 
     const result = await findAllAcademicFaculties(filters, options);
 
-    sendResponse(res, {
+    sendResponse<AcademicFaculty[]>(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: 'AcademicFaculties is retrieved successfully!',
@@ -43,6 +48,30 @@ export const getAcademicFaculty = catchAsync(async (req: Request, res: Response)
         statusCode: httpStatus.OK,
         success: true,
         message: 'AcademicFaculty is retrieved successfully!',
+        data: result,
+    });
+});
+
+export const updateAcademicFaculty = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params?.id;
+    const result = await editAcademicFaculty(id, req.body);
+
+    sendResponse<AcademicFaculty>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'AcademicFaculty is updated successfully!',
+        data: result,
+    });
+});
+
+export const deleteAcademicFaculty = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params?.id;
+    const result = await removeAcademicFaculty(id);
+
+    sendResponse<AcademicFaculty>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'AcademicFaculty deleted successfully!',
         data: result,
     });
 });

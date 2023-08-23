@@ -12,5 +12,7 @@ const router = (0, express_1.Router)();
 router.get('/', controller_1.getAllAcademicFaculties);
 router.get('/:id', controller_1.getAcademicFaculty);
 router.post('/create-academic-faculty', (0, validateRequest_1.default)(validation_1.academicFacultyValidation), controller_1.createAcademicFaculty);
+router.patch('/:id', (0, validateRequest_1.default)(validation_1.updateAcademicFacultyValidation), controller_1.updateAcademicFaculty);
+router.delete('/:id', controller_1.deleteAcademicFaculty);
 const academicFacultyRoutes = router;
 exports.default = academicFacultyRoutes;

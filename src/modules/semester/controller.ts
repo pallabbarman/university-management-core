@@ -6,7 +6,13 @@ import catchAsync from 'utils/catchAsync';
 import pick from 'utils/pick';
 import sendResponse from 'utils/sendResponse';
 import { semesterFilterableFields } from './constant';
-import { findAllSemesters, findSemester, insertSemester } from './service';
+import {
+    editSemester,
+    findAllSemesters,
+    findSemester,
+    insertSemester,
+    removeSemester,
+} from './service';
 
 export const createSemester = catchAsync(async (req: Request, res: Response) => {
     const result = await insertSemester(req.body);
@@ -41,6 +47,30 @@ export const getSemester = catchAsync(async (req: Request, res: Response) => {
         statusCode: httpStatus.OK,
         success: true,
         message: 'Semester is retrieved successfully!',
+        data: result,
+    });
+});
+
+export const updateSemester = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params?.id;
+    const result = await editSemester(id, req.body);
+
+    sendResponse<Semester>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Semester is updated successfully!',
+        data: result,
+    });
+});
+
+export const deleteSemester = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params?.id;
+    const result = await removeSemester(id);
+
+    sendResponse<Semester>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Semester deleted successfully!',
         data: result,
     });
 });

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findFaculty = exports.findAllFaculties = exports.insertFaculty = void 0;
+exports.removeFaculty = exports.editFaculty = exports.findFaculty = exports.findAllFaculties = exports.insertFaculty = void 0;
 const pagination_1 = __importDefault(require("../../utils/pagination"));
 const prisma_1 = __importDefault(require("../../utils/prisma"));
 const constant_1 = require("./constant");
@@ -91,3 +91,26 @@ const findFaculty = async (id) => {
     return result;
 };
 exports.findFaculty = findFaculty;
+const editFaculty = async (id, payload) => {
+    const result = await prisma_1.default.faculty.update({
+        where: {
+            id,
+        },
+        data: payload,
+        include: {
+            academicFaculty: true,
+            department: true,
+        },
+    });
+    return result;
+};
+exports.editFaculty = editFaculty;
+const removeFaculty = async (id) => {
+    const result = await prisma_1.default.faculty.delete({
+        where: {
+            id,
+        },
+    });
+    return result;
+};
+exports.removeFaculty = removeFaculty;

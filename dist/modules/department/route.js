@@ -11,5 +11,7 @@ const router = (0, express_1.Router)();
 router.get('/', controller_1.getAllDepartments);
 router.get('/:id', controller_1.getDepartment);
 router.post('/create-department', (0, validateRequest_1.default)(validation_1.departmentValidation), controller_1.createDepartment);
+router.patch('/:id', (0, validateRequest_1.default)(validation_1.updateDepartmentValidation), controller_1.updateDepartment);
+router.delete('/:id', controller_1.deleteDepartment);
 const departmentRoutes = router;
 exports.default = departmentRoutes;

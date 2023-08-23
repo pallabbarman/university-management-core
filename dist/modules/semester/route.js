@@ -11,5 +11,7 @@ const router = (0, express_1.Router)();
 router.get('/', controller_1.getAllSemesters);
 router.get('/:id', controller_1.getSemester);
 router.post('/create-semester', (0, validateRequest_1.default)(validation_1.semesterValidation), controller_1.createSemester);
+router.patch('/:id', (0, validateRequest_1.default)(validation_1.updateSemesterValidation), controller_1.updateSemester);
+router.delete('/:id', controller_1.deleteSemester);
 const semesterRoutes = router;
 exports.default = semesterRoutes;
