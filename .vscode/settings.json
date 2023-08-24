@@ -9,5 +9,8 @@
         "source.fixAll.eslint": true,
         "source.fixAll.tslint": true,
         "source.organizeImports": true
+    },
+    "[prisma]": {
+        "editor.defaultFormatter": "Prisma.prisma"
     }
 }
