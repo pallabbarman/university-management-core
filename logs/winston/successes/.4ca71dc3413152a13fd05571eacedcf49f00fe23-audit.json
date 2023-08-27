@@ -6,19 +6,19 @@
     "auditLog": "D:\\Web Development\\Next Level\\UM\\logs\\winston\\successes\\.4ca71dc3413152a13fd05571eacedcf49f00fe23-audit.json",
     "files": [
         {
-            "date": 1692336697541,
-            "name": "D:\\Web Development\\Next Level\\UM\\logs\\winston\\successes\\success-2023-08-18-11.log",
-            "hash": "46d70108105be7dc4b2d4a599956e546fbd102459bccfd42b8eefcd04ac4310a"
+            "date": 1693022584267,
+            "name": "D:\\Web Development\\Next Level\\UM\\logs\\winston\\successes\\success-2023-08-26-10.log",
+            "hash": "6d80a8677da4cad4569c00a01b25a4d885f3de3747baaf2148f254ec04d8285b"
         },
         {
-            "date": 1692338400120,
-            "name": "D:\\Web Development\\Next Level\\UM\\logs\\winston\\successes\\success-2023-08-18-12.log",
-            "hash": "6e89dd66c3facdc5e7added95aead84affc8929c00508eee34fc5dbec5b2d966"
+            "date": 1693140866778,
+            "name": "D:\\Web Development\\Next Level\\UM\\logs\\winston\\successes\\success-2023-08-27-18.log",
+            "hash": "bb2473b0a67aed057b4557dab099689663bc961df4d7e823d12fc1fa41097438"
         },
         {
-            "date": 1692354088741,
-            "name": "D:\\Web Development\\Next Level\\UM\\logs\\winston\\successes\\success-2023-08-18-16.log",
-            "hash": "d545cd0fcae93ea9eed1641f8cf0f413c2381486bdd666de2911757a3bb51a95"
+            "date": 1693142772111,
+            "name": "D:\\Web Development\\Next Level\\UM\\logs\\winston\\successes\\success-2023-08-27-19.log",
+            "hash": "7dc86f0abaf09eb0f1460c40a9a72913d48a86b1518e51b4e0c9688c5051a977"
         }
     ],
     "hashType": "sha256"
