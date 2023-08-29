@@ -37,3 +37,11 @@ export const updateCourseValidation = z.object({
             .optional(),
     }),
 });
+
+export const facultiesValidation = z.object({
+    body: z.object({
+        faculties: z.array(z.string(), {
+            required_error: 'Faculties are required',
+        }),
+    }),
+});

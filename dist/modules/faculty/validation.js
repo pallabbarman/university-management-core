@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateFacultyValidation = exports.facultyValidation = void 0;
+exports.coursesValidation = exports.updateFacultyValidation = exports.facultyValidation = void 0;
 const zod_1 = __importDefault(require("zod"));
 exports.facultyValidation = zod_1.default.object({
     body: zod_1.default.object({
@@ -59,5 +59,12 @@ exports.updateFacultyValidation = zod_1.default.object({
         designation: zod_1.default.string().optional(),
         departmentId: zod_1.default.string().optional(),
         academicFacultyId: zod_1.default.string().optional(),
+    }),
+});
+exports.coursesValidation = zod_1.default.object({
+    body: zod_1.default.object({
+        courses: zod_1.default.array(zod_1.default.string(), {
+            required_error: 'Courses are required',
+        }),
     }),
 });

@@ -2,7 +2,7 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable operator-linebreak */
 /* eslint-disable comma-dangle */
-import { Faculty, Prisma } from '@prisma/client';
+import { CourseFaculty, Faculty, Prisma } from '@prisma/client';
 import { IPaginationOptions } from 'types/pagination';
 import { IGenericResponse } from 'types/response';
 import calculatePagination from 'utils/pagination';
@@ -131,6 +131,51 @@ export const removeFaculty = async (id: string): Promise<Faculty> => {
     const result = await prisma.faculty.delete({
         where: {
             id,
+        },
+    });
+
+    return result;
+};
+
+export const setCourses = async (id: string, payload: string[]): Promise<CourseFaculty[]> => {
+    await prisma.courseFaculty.createMany({
+        data: payload.map((courseId) => ({
+            courseId,
+            facultyId: id,
+        })),
+    });
+
+    const result = await prisma.courseFaculty.findMany({
+        where: {
+            facultyId: id,
+        },
+        include: {
+            course: true,
+        },
+    });
+
+    return result;
+};
+
+export const removeCourses = async (
+    id: string,
+    payload: string[]
+): Promise<CourseFaculty[] | null> => {
+    await prisma.courseFaculty.deleteMany({
+        where: {
+            facultyId: id,
+            courseId: {
+                in: payload,
+            },
+        },
+    });
+
+    const result = await prisma.courseFaculty.findMany({
+        where: {
+            facultyId: id,
+        },
+        include: {
+            course: true,
         },
     });
 

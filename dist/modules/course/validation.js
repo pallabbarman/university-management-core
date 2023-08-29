@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateCourseValidation = exports.courseValidation = void 0;
+exports.facultiesValidation = exports.updateCourseValidation = exports.courseValidation = void 0;
 /* eslint-disable comma-dangle */
 const zod_1 = __importDefault(require("zod"));
 exports.courseValidation = zod_1.default.object({
@@ -35,5 +35,12 @@ exports.updateCourseValidation = zod_1.default.object({
             isDeleted: zod_1.default.boolean({}).optional(),
         }))
             .optional(),
+    }),
+});
+exports.facultiesValidation = zod_1.default.object({
+    body: zod_1.default.object({
+        faculties: zod_1.default.array(zod_1.default.string(), {
+            required_error: 'Faculties are required',
+        }),
     }),
 });

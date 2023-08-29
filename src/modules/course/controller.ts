@@ -1,5 +1,4 @@
-/* eslint-disable object-curly-newline */
-import { Course } from '@prisma/client';
+import { Course, CourseFaculty } from '@prisma/client';
 import paginationFields from 'constants/pagination';
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
@@ -7,7 +6,15 @@ import catchAsync from 'utils/catchAsync';
 import pick from 'utils/pick';
 import sendResponse from 'utils/sendResponse';
 import { courseFilterableFields } from './constant';
-import { editCourse, findAllCourses, findCourse, insertCourse, removeCourse } from './service';
+import {
+    editCourse,
+    findAllCourses,
+    findCourse,
+    insertCourse,
+    removeCourse,
+    removeFaculties,
+    setFaculties,
+} from './service';
 
 export const createCourse = catchAsync(async (req: Request, res: Response) => {
     const result = await insertCourse(req.body);
@@ -67,6 +74,30 @@ export const deleteCourse = catchAsync(async (req: Request, res: Response) => {
         statusCode: httpStatus.OK,
         success: true,
         message: 'Course deleted successfully!',
+        data: result,
+    });
+});
+
+export const assignFaculties = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params?.id;
+    const result = await setFaculties(id, req.body?.faculties);
+
+    sendResponse<CourseFaculty[]>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Course faculty assigned successfully!',
+        data: result,
+    });
+});
+
+export const deleteFaculties = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params?.id;
+    const result = await removeFaculties(id, req.body?.faculties);
+
+    sendResponse<CourseFaculty[]>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Course faculty deleted successfully!',
         data: result,
     });
 });

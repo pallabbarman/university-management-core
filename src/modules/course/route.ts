@@ -1,11 +1,18 @@
 /* eslint-disable comma-dangle */
-/* eslint-disable object-curly-newline */
 import { Router } from 'express';
 import auth from 'middlewares/auth';
 import validateRequest from 'middlewares/validateRequest';
 import { USER_ROLE } from 'types/user';
-import { createCourse, deleteCourse, getAllCourses, getCourse, updateCourse } from './controller';
-import { courseValidation, updateCourseValidation } from './validation';
+import {
+    assignFaculties,
+    createCourse,
+    deleteCourse,
+    deleteFaculties,
+    getAllCourses,
+    getCourse,
+    updateCourse,
+} from './controller';
+import { courseValidation, facultiesValidation, updateCourseValidation } from './validation';
 
 const router = Router();
 
@@ -24,6 +31,18 @@ router.patch(
     updateCourse
 );
 router.delete('/:id', auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN), deleteCourse);
+router.post(
+    '/:id/assign-faculties',
+    validateRequest(facultiesValidation),
+    auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    assignFaculties
+);
+router.delete(
+    '/:id/remove-faculties',
+    validateRequest(facultiesValidation),
+    auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    deleteFaculties
+);
 
 const courseRoutes = router;
 

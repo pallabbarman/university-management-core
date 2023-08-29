@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeCourse = exports.editCourse = exports.findCourse = exports.findAllCourses = exports.insertCourse = void 0;
+exports.removeFaculties = exports.setFaculties = exports.removeCourse = exports.editCourse = exports.findCourse = exports.findAllCourses = exports.insertCourse = void 0;
 const apiError_1 = __importDefault(require("../../errors/apiError"));
 const http_status_1 = __importDefault(require("http-status"));
 const asyncForEach_1 = require("../../utils/asyncForEach");
@@ -206,3 +206,41 @@ const removeCourse = async (id) => {
     return result;
 };
 exports.removeCourse = removeCourse;
+const setFaculties = async (id, payload) => {
+    await prisma_1.default.courseFaculty.createMany({
+        data: payload.map((facultyId) => ({
+            courseId: id,
+            facultyId,
+        })),
+    });
+    const result = await prisma_1.default.courseFaculty.findMany({
+        where: {
+            courseId: id,
+        },
+        include: {
+            faculty: true,
+        },
+    });
+    return result;
+};
+exports.setFaculties = setFaculties;
+const removeFaculties = async (id, payload) => {
+    await prisma_1.default.courseFaculty.deleteMany({
+        where: {
+            courseId: id,
+            facultyId: {
+                in: payload,
+            },
+        },
+    });
+    const result = await prisma_1.default.courseFaculty.findMany({
+        where: {
+            courseId: id,
+        },
+        include: {
+            faculty: true,
+        },
+    });
+    return result;
+};
+exports.removeFaculties = removeFaculties;

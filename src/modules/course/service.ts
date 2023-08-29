@@ -2,7 +2,7 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable operator-linebreak */
 /* eslint-disable comma-dangle */
-import { Course, Prisma } from '@prisma/client';
+import { Course, CourseFaculty, Prisma } from '@prisma/client';
 import ApiError from 'errors/apiError';
 import httpStatus from 'http-status';
 import { IPaginationOptions } from 'types/pagination';
@@ -249,6 +249,51 @@ export const removeCourse = async (id: string): Promise<Course> => {
     const result = await prisma.course.delete({
         where: {
             id,
+        },
+    });
+
+    return result;
+};
+
+export const setFaculties = async (id: string, payload: string[]): Promise<CourseFaculty[]> => {
+    await prisma.courseFaculty.createMany({
+        data: payload.map((facultyId) => ({
+            courseId: id,
+            facultyId,
+        })),
+    });
+
+    const result = await prisma.courseFaculty.findMany({
+        where: {
+            courseId: id,
+        },
+        include: {
+            faculty: true,
+        },
+    });
+
+    return result;
+};
+
+export const removeFaculties = async (
+    id: string,
+    payload: string[]
+): Promise<CourseFaculty[] | null> => {
+    await prisma.courseFaculty.deleteMany({
+        where: {
+            courseId: id,
+            facultyId: {
+                in: payload,
+            },
+        },
+    });
+
+    const result = await prisma.courseFaculty.findMany({
+        where: {
+            courseId: id,
+        },
+        include: {
+            faculty: true,
         },
     });
 
