@@ -6,44 +6,14 @@
     "auditLog": "D:\\Pallab\\university-management-core\\logs\\winston\\errors\\.6f9f4b9b82fe6a65bf52186e4ccf8c10f7f6d239-audit.json",
     "files": [
         {
-            "date": 1692675198427,
-            "name": "D:\\Pallab\\university-management-core\\logs\\winston\\errors\\error-2023-08-22-09.log",
-            "hash": "1ac19509e6883d9db2c8ab6dab98443a7e9aefefe16255523109bbd0644305f1"
+            "date": 1693886648591,
+            "name": "D:\\Pallab\\university-management-core\\logs\\winston\\errors\\error-2023-09-05-10.log",
+            "hash": "6108bd2f16d3e981305e4c50a6c6789bba2a3b7e1990b2415a8e6545d2563ae6"
         },
         {
-            "date": 1692676818163,
-            "name": "D:\\Pallab\\university-management-core\\logs\\winston\\errors\\error-2023-08-22-10.log",
-            "hash": "6a2b649d1def25aa966434ca75b0e111faec6e614add3cc1be41e1e4316fd5a0"
-        },
-        {
-            "date": 1692770348039,
-            "name": "D:\\Pallab\\university-management-core\\logs\\winston\\errors\\error-2023-08-23-11.log",
-            "hash": "61e478e6daaf6635837b688e048c616c29b8fc3b516e690da20f74a2b7c0e922"
-        },
-        {
-            "date": 1692770477999,
-            "name": "D:\\Pallab\\university-management-core\\logs\\winston\\errors\\error-2023-08-23-12.log",
-            "hash": "d8f85351a8ee87515b0374b183043ac001e47518fd47bf2c31a541c4c65d480c"
-        },
-        {
-            "date": 1692790871314,
-            "name": "D:\\Pallab\\university-management-core\\logs\\winston\\errors\\error-2023-08-23-17.log",
-            "hash": "ad3f3ffbb96d47ff9e2bbdffe2d695a7df389df64b183227ab4a93f6124df96f"
-        },
-        {
-            "date": 1692870731646,
-            "name": "D:\\Pallab\\university-management-core\\logs\\winston\\errors\\error-2023-08-24-15.log",
-            "hash": "d8b798501ba360c834dca3ab48a5e03be49fba7116dd88f9fed30a6026c12e48"
-        },
-        {
-            "date": 1692871750079,
-            "name": "D:\\Pallab\\university-management-core\\logs\\winston\\errors\\error-2023-08-24-16.log",
-            "hash": "669c739c3039aa75e115c63e958ef34b6a858abb623674b080718269d1fe3927"
-        },
-        {
-            "date": 1693279498719,
-            "name": "D:\\Pallab\\university-management-core\\logs\\winston\\errors\\error-2023-08-29-09.log",
-            "hash": "4b71f35869c3167ffc74726a53a12b9fd4933f9c66d430d9e83fb9f23b949585"
+            "date": 1693890845132,
+            "name": "D:\\Pallab\\university-management-core\\logs\\winston\\errors\\error-2023-09-05-11.log",
+            "hash": "6740a2116afbbccd9185435d570f8f572a199725b21fbf14c03429d767218faa"
         }
     ],
     "hashType": "sha256"
