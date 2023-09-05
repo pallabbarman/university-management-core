@@ -10,12 +10,13 @@ const route_3 = __importDefault(require("../modules/course/route"));
 const route_4 = __importDefault(require("../modules/department/route"));
 const route_5 = __importDefault(require("../modules/room/route"));
 const route_6 = __importDefault(require("../modules/semester/route"));
-const route_7 = __importDefault(require("../modules/student/route"));
+const route_7 = __importDefault(require("../modules/semesterRegistration/route"));
+const route_8 = __importDefault(require("../modules/student/route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
         path: '/students',
-        route: route_7.default,
+        route: route_8.default,
     },
     {
         path: '/semesters',
@@ -40,6 +41,10 @@ const moduleRoutes = [
     {
         path: '/courses',
         route: route_3.default,
+    },
+    {
+        path: '/semester-registration',
+        route: route_7.default,
     },
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
