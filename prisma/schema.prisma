@@ -46,6 +46,7 @@ model Department {
   students          Student[]
   faculties         Faculty[]
   academicFaculty   AcademicFaculty @relation(fields: [academicFacultyId], references: [id])
+  offeredCourses    OfferedCourse[]
 
   @@map("departments")
 }
@@ -128,6 +129,7 @@ model Course {
   preRequisite    CourseToPrerequisite[] @relation("CourseToPrerequisite")
   preRequisiteFor CourseToPrerequisite[] @relation("PrerequisiteToCourse")
   faculties       CourseFaculty[]
+  offeredCourses  OfferedCourse[]
 
   @@map("courses")
 }
@@ -153,18 +155,33 @@ model CourseFaculty {
 }
 
 model SemesterRegistration {
-  id         String                      @id @default(uuid())
-  startDate  DateTime
-  endDate    DateTime
-  status     SemesterRegistrationStatus? @default(UPCOMING)
-  minCredit  Int                         @default(0)
-  maxCredit  Int                         @default(0)
-  createdAt  DateTime                    @default(now())
-  updatedAt  DateTime                    @updatedAt
-  semesterId String
-  semester   Semester                    @relation(fields: [semesterId], references: [id])
+  id             String                      @id @default(uuid())
+  startDate      DateTime
+  endDate        DateTime
+  status         SemesterRegistrationStatus? @default(UPCOMING)
+  minCredit      Int                         @default(0)
+  maxCredit      Int                         @default(0)
+  createdAt      DateTime                    @default(now())
+  updatedAt      DateTime                    @updatedAt
+  semesterId     String
+  semester       Semester                    @relation(fields: [semesterId], references: [id])
+  offeredCourses OfferedCourse[]
 
   @@map("semester_registrations")
+}
+
+model OfferedCourse {
+  id                     String               @id @default(uuid())
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
+  courseId               String
+  departmentId           String
+  semesterRegistrationId String
+  course                 Course               @relation(fields: [courseId], references: [id])
+  department             Department           @relation(fields: [departmentId], references: [id])
+  semesterRegistration   SemesterRegistration @relation(fields: [semesterRegistrationId], references: [id])
+
+  @@map("offered_courses")
 }
 
 enum SemesterRegistrationStatus {

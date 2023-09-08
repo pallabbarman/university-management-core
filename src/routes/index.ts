@@ -3,6 +3,7 @@ import academicFacultyRoutes from 'modules/academicFaculty/route';
 import buildingRoutes from 'modules/building/route';
 import courseRoutes from 'modules/course/route';
 import departmentRoutes from 'modules/department/route';
+import offeredCourseRoutes from 'modules/offeredCourse/route';
 import roomRoutes from 'modules/room/route';
 import semesterRoutes from 'modules/semester/route';
 import semesterRegistrationRoutes from 'modules/semesterRegistration/route';
@@ -42,6 +43,10 @@ const moduleRoutes = [
     {
         path: '/semester-registration',
         route: semesterRegistrationRoutes,
+    },
+    {
+        path: '/offered-courses',
+        route: offeredCourseRoutes,
     },
 ];
 
