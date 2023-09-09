@@ -17,7 +17,7 @@ const router = Router();
 router.get('/', getAllBuildings);
 router.get('/:id', getBuilding);
 router.post(
-    '/create-building',
+    '/',
     auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     validateRequest(buildingValidation),
     createBuilding

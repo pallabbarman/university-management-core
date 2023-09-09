@@ -10,19 +10,20 @@ const route_3 = __importDefault(require("../modules/course/route"));
 const route_4 = __importDefault(require("../modules/department/route"));
 const route_5 = __importDefault(require("../modules/offeredCourse/route"));
 const route_6 = __importDefault(require("../modules/offeredCourseClassSchedule/route"));
-const route_7 = __importDefault(require("../modules/room/route"));
-const route_8 = __importDefault(require("../modules/semester/route"));
-const route_9 = __importDefault(require("../modules/semesterRegistration/route"));
-const route_10 = __importDefault(require("../modules/student/route"));
+const route_7 = __importDefault(require("../modules/offeredCourseSection/route"));
+const route_8 = __importDefault(require("../modules/room/route"));
+const route_9 = __importDefault(require("../modules/semester/route"));
+const route_10 = __importDefault(require("../modules/semesterRegistration/route"));
+const route_11 = __importDefault(require("../modules/student/route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
         path: '/students',
-        route: route_10.default,
+        route: route_11.default,
     },
     {
         path: '/semesters',
-        route: route_8.default,
+        route: route_9.default,
     },
     {
         path: '/departments',
@@ -38,7 +39,7 @@ const moduleRoutes = [
     },
     {
         path: '/rooms',
-        route: route_7.default,
+        route: route_8.default,
     },
     {
         path: '/courses',
@@ -46,11 +47,15 @@ const moduleRoutes = [
     },
     {
         path: '/semester-registration',
-        route: route_9.default,
+        route: route_10.default,
     },
     {
         path: '/offered-courses',
         route: route_5.default,
+    },
+    {
+        path: '/offered-course-sections',
+        route: route_7.default,
     },
     {
         path: '/offered-course-class-schedules',

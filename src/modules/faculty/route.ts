@@ -18,7 +18,7 @@ const router = Router();
 
 router.get('/id', getAllFaculties);
 router.get('/:id', getFaculty);
-router.post('/create-faculty', validateRequest(facultyValidation), createFaculty);
+router.post('/', validateRequest(facultyValidation), createFaculty);
 router.patch(
     '/:id',
     validateRequest(updateFacultyValidation),

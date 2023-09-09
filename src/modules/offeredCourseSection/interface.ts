@@ -1,3 +1,5 @@
+import { WeekDays } from '@prisma/client';
+
 export interface IOfferedCourseSectionFilter {
     searchTerm?: string;
     offeredCourseId?: string;
@@ -6,7 +8,7 @@ export interface IOfferedCourseSectionFilter {
 export interface IClassSchedule {
     startTime: string;
     endTime: string;
-    dayOfWeek: any;
+    dayOfWeek: WeekDays;
     roomId: string;
     facultyId: string;
 }

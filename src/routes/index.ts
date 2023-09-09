@@ -5,6 +5,7 @@ import courseRoutes from 'modules/course/route';
 import departmentRoutes from 'modules/department/route';
 import offeredCourseRoutes from 'modules/offeredCourse/route';
 import offeredCourseClassScheduleRoutes from 'modules/offeredCourseClassSchedule/route';
+import offeredCourseSectionRoutes from 'modules/offeredCourseSection/route';
 import roomRoutes from 'modules/room/route';
 import semesterRoutes from 'modules/semester/route';
 import semesterRegistrationRoutes from 'modules/semesterRegistration/route';
@@ -48,6 +49,10 @@ const moduleRoutes = [
     {
         path: '/offered-courses',
         route: offeredCourseRoutes,
+    },
+    {
+        path: '/offered-course-sections',
+        route: offeredCourseSectionRoutes,
     },
     {
         path: '/offered-course-class-schedules',

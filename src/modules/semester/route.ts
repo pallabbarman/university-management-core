@@ -1,5 +1,8 @@
+/* eslint-disable comma-dangle */
 import { Router } from 'express';
+import auth from 'middlewares/auth';
 import validateRequest from 'middlewares/validateRequest';
+import { USER_ROLE } from 'types/user';
 import {
     createSemester,
     deleteSemester,
@@ -13,9 +16,14 @@ const router = Router();
 
 router.get('/', getAllSemesters);
 router.get('/:id', getSemester);
-router.post('/create-semester', validateRequest(semesterValidation), createSemester);
-router.patch('/:id', validateRequest(updateSemesterValidation), updateSemester);
-router.delete('/:id', deleteSemester);
+router.post('/', validateRequest(semesterValidation), createSemester);
+router.patch(
+    '/:id',
+    validateRequest(updateSemesterValidation),
+    auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    updateSemester
+);
+router.delete('/:id', auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN), deleteSemester);
 
 const semesterRoutes = router;
 
