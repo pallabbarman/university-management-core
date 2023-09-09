@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Prisma } from '@prisma/client';
-import envConfig from 'configs/index';
+import configs from 'configs/index';
 import ApiError from 'errors/apiError';
 import handleClientError from 'errors/handleClientError';
 import handleValidationError from 'errors/handleValidationError';
@@ -13,7 +13,7 @@ import { errorLogger } from 'utils/logger';
 import { ZodError } from 'zod';
 
 const globalErrorHandlers: ErrorRequestHandler = (err, _req, res, _next) => {
-    envConfig.env === 'development'
+    configs.env === 'development'
         ? console.log('globalErrorHandler ~', err)
         : errorLogger.error('globalErrorHandler ~', err);
 
@@ -63,7 +63,7 @@ const globalErrorHandlers: ErrorRequestHandler = (err, _req, res, _next) => {
         success: false,
         message,
         errorMessages,
-        stack: envConfig.env !== 'production' ? err?.stack : undefined,
+        stack: configs.env !== 'production' ? err?.stack : undefined,
     });
 };
 

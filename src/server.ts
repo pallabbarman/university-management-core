@@ -1,11 +1,11 @@
 import { Server } from 'http';
 import { errorLogger, logger } from 'utils/logger';
 import app from './app';
-import envConfig from './configs';
+import configs from './configs';
 
 const startServer = async () => {
-    const server: Server = app.listen(envConfig.port, () => {
-        logger.info(`Server running on port ${envConfig.port || 5000}`);
+    const server: Server = app.listen(configs.port, () => {
+        logger.info(`Server running on port ${configs.port || 5000}`);
     });
 
     const exitHandler = () => {
