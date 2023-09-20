@@ -8,6 +8,7 @@ import {
     deleteSemesterRegistration,
     getAllSemesterRegistration,
     getSemesterRegistration,
+    startMyRegistration,
     updateSemesterRegistration,
 } from './controller';
 import { semesterRegistrationValidation, updateSemesterRegistrationValidation } from './validation';
@@ -29,6 +30,7 @@ router.patch(
     updateSemesterRegistration
 );
 router.delete('/:id', auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN), deleteSemesterRegistration);
+router.post('/start-registration', auth(USER_ROLE.STUDENT), startMyRegistration);
 
 const semesterRegistrationRoutes = router;
 

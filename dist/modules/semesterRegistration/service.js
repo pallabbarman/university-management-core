@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeSemesterRegistration = exports.editSemesterRegistration = exports.findSemesterRegistration = exports.findAllSemesterRegistration = exports.insertSemesterRegistration = void 0;
+exports.beginMyRegistration = exports.removeSemesterRegistration = exports.editSemesterRegistration = exports.findSemesterRegistration = exports.findAllSemesterRegistration = exports.insertSemesterRegistration = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable operator-linebreak */
 /* eslint-disable object-curly-newline */
@@ -152,3 +152,54 @@ const removeSemesterRegistration = async (id) => {
     return result;
 };
 exports.removeSemesterRegistration = removeSemesterRegistration;
+const beginMyRegistration = async (authUserId) => {
+    const studentInfo = await prisma_1.default.student.findFirst({
+        where: {
+            studentId: authUserId,
+        },
+    });
+    if (!studentInfo) {
+        throw new apiError_1.default(http_status_1.default.BAD_REQUEST, 'Student Info not found!');
+    }
+    const semesterRegistrationInfo = await prisma_1.default.semesterRegistration.findFirst({
+        where: {
+            status: {
+                in: [client_1.SemesterRegistrationStatus.ONGOING, client_1.SemesterRegistrationStatus.UPCOMING],
+            },
+        },
+    });
+    if (semesterRegistrationInfo?.status === client_1.SemesterRegistrationStatus.UPCOMING) {
+        throw new apiError_1.default(http_status_1.default.BAD_REQUEST, 'Registration is not started yet');
+    }
+    let studentRegistration = await prisma_1.default.studentSemesterRegistration.findFirst({
+        where: {
+            student: {
+                id: studentInfo?.id,
+            },
+            semesterRegistration: {
+                id: semesterRegistrationInfo?.id,
+            },
+        },
+    });
+    if (!studentRegistration) {
+        studentRegistration = await prisma_1.default.studentSemesterRegistration.create({
+            data: {
+                student: {
+                    connect: {
+                        id: studentInfo?.id,
+                    },
+                },
+                semesterRegistration: {
+                    connect: {
+                        id: semesterRegistrationInfo?.id,
+                    },
+                },
+            },
+        });
+    }
+    return {
+        semesterRegistration: semesterRegistrationInfo,
+        studentSemesterRegistration: studentRegistration,
+    };
+};
+exports.beginMyRegistration = beginMyRegistration;

@@ -8,6 +8,7 @@ import pick from 'utils/pick';
 import sendResponse from 'utils/sendResponse';
 import { semesterRegistrationFilterableFields } from './constant';
 import {
+    beginMyRegistration,
     editSemesterRegistration,
     findAllSemesterRegistration,
     findSemesterRegistration,
@@ -76,6 +77,19 @@ export const deleteSemesterRegistration = catchAsync(async (req: Request, res: R
         statusCode: httpStatus.OK,
         success: true,
         message: 'Semester Registration deleted successfully!',
+        data: result,
+    });
+});
+
+export const startMyRegistration = catchAsync(async (req: Request, res: Response) => {
+    const { user } = req;
+
+    const result = await beginMyRegistration(user.userId);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Student semester registration started successfully',
         data: result,
     });
 });
