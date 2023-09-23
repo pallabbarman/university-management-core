@@ -7,6 +7,7 @@ import {
     createSemesterRegistration,
     deleteSemesterRegistration,
     getAllSemesterRegistration,
+    getMyRegistration,
     getSemesterRegistration,
     startMyRegistration,
     updateSemesterRegistration,
@@ -23,6 +24,7 @@ router.post(
 );
 router.get('/', getAllSemesterRegistration);
 router.get('/:id', getSemesterRegistration);
+router.get('/get-my-registration', auth(USER_ROLE.STUDENT), getMyRegistration);
 router.patch(
     '/:id',
     validateRequest(updateSemesterRegistrationValidation),
