@@ -10,6 +10,8 @@ import {
     deleteFaculty,
     getAllFaculties,
     getFaculty,
+    getMyCourseStudents,
+    myCourses,
     updateFaculty,
 } from './controller';
 import { coursesValidation, facultyValidation, updateFacultyValidation } from './validation';
@@ -18,6 +20,8 @@ const router = Router();
 
 router.get('/id', getAllFaculties);
 router.get('/:id', getFaculty);
+router.get('/my-courses', auth(USER_ROLE.FACULTY), myCourses);
+router.get('/my-course-students', auth(USER_ROLE.FACULTY), getMyCourseStudents);
 router.post('/', validateRequest(facultyValidation), createFaculty);
 router.patch(
     '/:id',

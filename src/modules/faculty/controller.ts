@@ -1,4 +1,4 @@
-import { CourseFaculty, Faculty } from '@prisma/client';
+import { CourseFaculty, Faculty, Student } from '@prisma/client';
 import paginationFields from 'constants/pagination';
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
@@ -10,6 +10,8 @@ import {
     editFaculty,
     findAllFaculties,
     findFaculty,
+    findMyCourseStudents,
+    findMyCourses,
     insertFaculty,
     removeCourses,
     removeFaculty,
@@ -99,5 +101,35 @@ export const deleteCourses = catchAsync(async (req: Request, res: Response) => {
         success: true,
         message: 'Course faculty deleted successfully!',
         data: result,
+    });
+});
+
+export const myCourses = catchAsync(async (req: Request, res: Response) => {
+    const { user } = req;
+    const filter = pick(req.query, ['academicSemesterId', 'courseId']);
+
+    const result = await findMyCourses(user, filter);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'My courses data fetched successfully!',
+        data: result,
+    });
+});
+
+export const getMyCourseStudents = catchAsync(async (req: Request, res: Response) => {
+    const { user } = req;
+    const filters = pick(req.query, ['academicSemesterId', 'courseId', 'offeredCourseSectionId']);
+    const options = pick(req.query, paginationFields);
+
+    const result = await findMyCourseStudents(filters, options, user);
+
+    sendResponse<Student[]>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Faculty course students fetched successfully',
+        meta: result.meta,
+        data: result.data,
     });
 });
