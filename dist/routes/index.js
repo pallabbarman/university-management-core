@@ -15,6 +15,9 @@ const route_8 = __importDefault(require("../modules/room/route"));
 const route_9 = __importDefault(require("../modules/semester/route"));
 const route_10 = __importDefault(require("../modules/semesterRegistration/route"));
 const route_11 = __importDefault(require("../modules/student/route"));
+const route_12 = __importDefault(require("../modules/studentEnrolledCourse/route"));
+const route_13 = __importDefault(require("../modules/studentEnrolledCourseMark/route"));
+const route_14 = __importDefault(require("../modules/studentSemesterPayment/route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -60,6 +63,18 @@ const moduleRoutes = [
     {
         path: '/offered-course-class-schedules',
         route: route_6.default,
+    },
+    {
+        path: '/student-enrolled-courses',
+        route: route_12.default,
+    },
+    {
+        path: '/student-enrolled-course-marks',
+        route: route_13.default,
+    },
+    {
+        path: '/student-semester-payments',
+        route: route_14.default,
     },
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

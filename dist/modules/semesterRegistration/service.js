@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.beginMyRegistration = exports.removeSemesterRegistration = exports.editSemesterRegistration = exports.findSemesterRegistration = exports.findAllSemesterRegistration = exports.insertSemesterRegistration = void 0;
+exports.findMySemesterRegCourses = exports.beginNewSemester = exports.findMyRegistration = exports.verifyMyRegistration = exports.drawOutFromCourse = exports.joinIntoCourse = exports.beginMyRegistration = exports.removeSemesterRegistration = exports.editSemesterRegistration = exports.findSemesterRegistration = exports.findAllSemesterRegistration = exports.insertSemesterRegistration = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable operator-linebreak */
 /* eslint-disable object-curly-newline */
@@ -11,9 +11,14 @@ exports.beginMyRegistration = exports.removeSemesterRegistration = exports.editS
 const client_1 = require("@prisma/client");
 const apiError_1 = __importDefault(require("../../errors/apiError"));
 const http_status_1 = __importDefault(require("http-status"));
+const service_1 = require("../studentEnrolledCourseMark/service");
+const service_2 = require("../studentSemesterPayment/service");
+const service_3 = require("../studentSemesterRegistrationCourse/service");
+const asyncForEach_1 = require("../../utils/asyncForEach");
 const pagination_1 = __importDefault(require("../../utils/pagination"));
 const prisma_1 = __importDefault(require("../../utils/prisma"));
 const constant_1 = require("./constant");
+const utils_1 = require("./utils");
 const insertSemesterRegistration = async (data) => {
     const isAnySemesterRegUpcomingOrOngoing = await prisma_1.default.semesterRegistration.findFirst({
         where: {
@@ -203,3 +208,258 @@ const beginMyRegistration = async (authUserId) => {
     };
 };
 exports.beginMyRegistration = beginMyRegistration;
+const joinIntoCourse = async (authUserId, payload) => (0, service_3.registerIntoCourse)(authUserId, payload);
+exports.joinIntoCourse = joinIntoCourse;
+const drawOutFromCourse = async (authUserId, payload) => (0, service_3.extractFromCourse)(authUserId, payload);
+exports.drawOutFromCourse = drawOutFromCourse;
+const verifyMyRegistration = async (authUserId) => {
+    const semesterRegistration = await prisma_1.default.semesterRegistration.findFirst({
+        where: {
+            status: client_1.SemesterRegistrationStatus.ONGOING,
+        },
+    });
+    const studentSemesterRegistration = await prisma_1.default.studentSemesterRegistration.findFirst({
+        where: {
+            semesterRegistration: {
+                id: semesterRegistration?.id,
+            },
+            student: {
+                studentId: authUserId,
+            },
+        },
+    });
+    if (!studentSemesterRegistration) {
+        throw new apiError_1.default(http_status_1.default.BAD_REQUEST, 'You are not recognized for this semester!');
+    }
+    if (studentSemesterRegistration.totalCreditsTaken === 0) {
+        throw new apiError_1.default(http_status_1.default.BAD_REQUEST, 'You are not enrolled in any course!');
+    }
+    if (studentSemesterRegistration.totalCreditsTaken &&
+        semesterRegistration?.minCredit &&
+        semesterRegistration.maxCredit &&
+        (studentSemesterRegistration.totalCreditsTaken < semesterRegistration?.minCredit ||
+            studentSemesterRegistration.totalCreditsTaken > semesterRegistration?.maxCredit)) {
+        throw new apiError_1.default(http_status_1.default.BAD_REQUEST, `You can take only ${semesterRegistration.minCredit} to ${semesterRegistration.maxCredit} credits`);
+    }
+    await prisma_1.default.studentSemesterRegistration.update({
+        where: {
+            id: studentSemesterRegistration.id,
+        },
+        data: {
+            isConfirmed: true,
+        },
+    });
+    return {
+        message: 'Your registration is confirmed!',
+    };
+};
+exports.verifyMyRegistration = verifyMyRegistration;
+const findMyRegistration = async (authUserId) => {
+    const semesterRegistration = await prisma_1.default.semesterRegistration.findFirst({
+        where: {
+            status: client_1.SemesterRegistrationStatus.ONGOING,
+        },
+        include: {
+            semester: true,
+        },
+    });
+    const studentSemesterRegistration = await prisma_1.default.studentSemesterRegistration.findFirst({
+        where: {
+            semesterRegistration: {
+                id: semesterRegistration?.id,
+            },
+            student: {
+                studentId: authUserId,
+            },
+        },
+        include: {
+            student: true,
+        },
+    });
+    return { semesterRegistration, studentSemesterRegistration };
+};
+exports.findMyRegistration = findMyRegistration;
+const beginNewSemester = async (id) => {
+    const semesterRegistration = await prisma_1.default.semesterRegistration.findUnique({
+        where: {
+            id,
+        },
+        include: {
+            semester: true,
+        },
+    });
+    if (!semesterRegistration) {
+        throw new apiError_1.default(http_status_1.default.BAD_REQUEST, 'Semester Registration Not found!');
+    }
+    if (semesterRegistration.status !== client_1.SemesterRegistrationStatus.ENDED) {
+        throw new apiError_1.default(http_status_1.default.BAD_REQUEST, 'Semester Registration is not ended yet!');
+    }
+    if (semesterRegistration.semester.isCurrent) {
+        throw new apiError_1.default(http_status_1.default.BAD_REQUEST, 'Semester is already started!');
+    }
+    await prisma_1.default.$transaction(async (prismaTransactionClient) => {
+        await prismaTransactionClient.semester.updateMany({
+            where: {
+                isCurrent: true,
+            },
+            data: {
+                isCurrent: false,
+            },
+        });
+        await prismaTransactionClient.semester.update({
+            where: {
+                id: semesterRegistration.semesterId,
+            },
+            data: {
+                isCurrent: true,
+            },
+        });
+        const studentSemesterRegistrations = await prisma_1.default.studentSemesterRegistration.findMany({
+            where: {
+                semesterRegistration: {
+                    id,
+                },
+                isConfirmed: true,
+            },
+        });
+        await (0, asyncForEach_1.asyncForEach)(studentSemesterRegistrations, async (studentSemReg) => {
+            if (studentSemReg.totalCreditsTaken) {
+                const totalSemesterPaymentAmount = studentSemReg.totalCreditsTaken * 5000;
+                await (0, service_2.insertSemesterPayment)(prismaTransactionClient, {
+                    studentId: studentSemReg.studentId,
+                    semesterId: semesterRegistration.semesterId,
+                    totalPaymentAmount: totalSemesterPaymentAmount,
+                });
+            }
+            const studentSemesterRegistrationCourses = await prismaTransactionClient.studentSemesterRegistrationCourse.findMany({
+                where: {
+                    semesterRegistration: {
+                        id,
+                    },
+                    student: {
+                        id: studentSemReg.studentId,
+                    },
+                },
+                include: {
+                    offeredCourse: {
+                        include: {
+                            course: true,
+                        },
+                    },
+                },
+            });
+            await (0, asyncForEach_1.asyncForEach)(studentSemesterRegistrationCourses, async (item) => {
+                const isExistEnrolledData = await prismaTransactionClient.studentEnrolledCourse.findFirst({
+                    where: {
+                        student: { id: item.studentId },
+                        course: { id: item.offeredCourse.courseId },
+                        semester: {
+                            id: semesterRegistration.semesterId,
+                        },
+                    },
+                });
+                if (!isExistEnrolledData) {
+                    const enrolledCourseData = {
+                        studentId: item.studentId,
+                        courseId: item.offeredCourse.courseId,
+                        semesterId: semesterRegistration.semesterId,
+                    };
+                    const studentEnrolledCourseData = await prismaTransactionClient.studentEnrolledCourse.create({
+                        data: enrolledCourseData,
+                    });
+                    await (0, service_1.createStudentEnrolledCourseDefaultMark)(prismaTransactionClient, {
+                        studentId: item.studentId,
+                        studentEnrolledCourseId: studentEnrolledCourseData.id,
+                        semesterId: semesterRegistration.semesterId,
+                    });
+                }
+            });
+        });
+    });
+    return {
+        message: 'Semester started successfully!',
+    };
+};
+exports.beginNewSemester = beginNewSemester;
+const findMySemesterRegCourses = async (authUserId) => {
+    const student = await prisma_1.default.student.findFirst({
+        where: {
+            studentId: authUserId,
+        },
+    });
+    const semesterRegistration = await prisma_1.default.semesterRegistration.findFirst({
+        where: {
+            status: {
+                in: [client_1.SemesterRegistrationStatus.UPCOMING, client_1.SemesterRegistrationStatus.ONGOING],
+            },
+        },
+        include: {
+            semester: true,
+        },
+    });
+    if (!semesterRegistration) {
+        throw new apiError_1.default(http_status_1.default.BAD_REQUEST, 'No semester registration not found!');
+    }
+    const studentCompletedCourse = await prisma_1.default.studentEnrolledCourse.findMany({
+        where: {
+            status: client_1.StudentEnrolledCourseStatus.COMPLETED,
+            student: {
+                id: student?.id,
+            },
+        },
+        include: {
+            course: true,
+        },
+    });
+    const studentCurrentSemesterTakenCourse = await prisma_1.default.studentSemesterRegistrationCourse.findMany({
+        where: {
+            student: {
+                id: student?.id,
+            },
+            semesterRegistration: {
+                id: semesterRegistration?.id,
+            },
+        },
+        include: {
+            offeredCourse: true,
+            offeredCourseSection: true,
+        },
+    });
+    const offeredCourse = await prisma_1.default.offeredCourse.findMany({
+        where: {
+            semesterRegistration: {
+                id: semesterRegistration.id,
+            },
+            department: {
+                id: student?.departmentId,
+            },
+        },
+        include: {
+            course: {
+                include: {
+                    preRequisite: {
+                        include: {
+                            preRequisite: true,
+                        },
+                    },
+                },
+            },
+            offeredCourseSections: {
+                include: {
+                    offeredCourseClassSchedules: {
+                        include: {
+                            room: {
+                                include: {
+                                    building: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+    const availableCourses = (0, utils_1.getAvailableCourses)(offeredCourse, studentCompletedCourse, studentCurrentSemesterTakenCourse);
+    return availableCourses;
+};
+exports.findMySemesterRegCourses = findMySemesterRegCourses;

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateSemesterRegistrationValidation = exports.semesterRegistrationValidation = void 0;
+exports.enrollOrWithdrawCourse = exports.updateSemesterRegistrationValidation = exports.semesterRegistrationValidation = void 0;
 const client_1 = require("@prisma/client");
 const zod_1 = __importDefault(require("zod"));
 exports.semesterRegistrationValidation = zod_1.default.object({
@@ -35,5 +35,15 @@ exports.updateSemesterRegistrationValidation = zod_1.default.object({
         status: zod_1.default
             .enum([...Object.values(client_1.SemesterRegistrationStatus)], {})
             .optional(),
+    }),
+});
+exports.enrollOrWithdrawCourse = zod_1.default.object({
+    body: zod_1.default.object({
+        offeredCourseId: zod_1.default.string({
+            required_error: 'Offered course id is required',
+        }),
+        offeredCourseSectionId: zod_1.default.string({
+            required_error: 'Offered course Section id is required',
+        }),
     }),
 });

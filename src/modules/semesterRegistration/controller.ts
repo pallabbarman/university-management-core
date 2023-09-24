@@ -9,10 +9,12 @@ import sendResponse from 'utils/sendResponse';
 import { semesterRegistrationFilterableFields } from './constant';
 import {
     beginMyRegistration,
+    beginNewSemester,
     drawOutFromCourse,
     editSemesterRegistration,
     findAllSemesterRegistration,
     findMyRegistration,
+    findMySemesterRegCourses,
     findSemesterRegistration,
     insertSemesterRegistration,
     joinIntoCourse,
@@ -145,6 +147,32 @@ export const getMyRegistration = catchAsync(async (req: Request, res: Response) 
         statusCode: httpStatus.OK,
         success: true,
         message: 'My registration data fetched!',
+        data: result,
+    });
+});
+
+export const startNewSemester = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const result = await beginNewSemester(id);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Semester Started Successfully!',
+        data: result,
+    });
+});
+
+export const getMySemesterRegCourses = catchAsync(async (req: Request, res: Response) => {
+    const { user } = req;
+
+    const result = await findMySemesterRegCourses(user.userId);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'My registration courses data fetched!',
         data: result,
     });
 });

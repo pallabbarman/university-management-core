@@ -10,6 +10,9 @@ import roomRoutes from 'modules/room/route';
 import semesterRoutes from 'modules/semester/route';
 import semesterRegistrationRoutes from 'modules/semesterRegistration/route';
 import studentRoutes from 'modules/student/route';
+import studentEnrolledCourseRoutes from 'modules/studentEnrolledCourse/route';
+import studentEnrolledCourseMarkRoutes from 'modules/studentEnrolledCourseMark/route';
+import studentSemesterPaymentRoutes from 'modules/studentSemesterPayment/route';
 
 const router = Router();
 
@@ -57,6 +60,18 @@ const moduleRoutes = [
     {
         path: '/offered-course-class-schedules',
         route: offeredCourseClassScheduleRoutes,
+    },
+    {
+        path: '/student-enrolled-courses',
+        route: studentEnrolledCourseRoutes,
+    },
+    {
+        path: '/student-enrolled-course-marks',
+        route: studentEnrolledCourseMarkRoutes,
+    },
+    {
+        path: '/student-semester-payments',
+        route: studentSemesterPaymentRoutes,
     },
 ];
 
