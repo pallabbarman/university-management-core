@@ -1,8 +1,9 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable comma-dangle */
 /* eslint-disable object-curly-newline */
 /* eslint-disable operator-linebreak */
-import { Prisma, Student } from '@prisma/client';
+import { Prisma, Student, StudentEnrolledCourseStatus } from '@prisma/client';
 import { IPaginationOptions } from 'types/pagination';
 import { IGenericResponse } from 'types/response';
 import calculatePagination from 'utils/pagination';
@@ -13,6 +14,7 @@ import {
     studentSearchableFields,
 } from './constant';
 import { IStudentFilter } from './interface';
+import { groupBySemester } from './utils';
 
 export const insertStudent = async (data: Student): Promise<Student> => {
     const result = await prisma.student.create({
@@ -144,4 +146,131 @@ export const removeStudent = async (id: string): Promise<Student> => {
     });
 
     return result;
+};
+
+export const findMyCourses = async (
+    authUserId: string,
+    filter: {
+        courseId?: string | undefined;
+        semesterId?: string | undefined;
+    }
+) => {
+    if (!filter.semesterId) {
+        const currentSemester = await prisma.semester.findFirst({
+            where: {
+                isCurrent: true,
+            },
+        });
+        filter.semesterId = currentSemester?.id;
+    }
+
+    const result = await prisma.studentEnrolledCourse.findMany({
+        where: {
+            student: {
+                studentId: authUserId,
+            },
+            ...filter,
+        },
+        include: {
+            course: true,
+        },
+    });
+
+    return result;
+};
+
+export const findMyCourseSchedules = async (
+    authUserId: string,
+    filter: {
+        courseId?: string | undefined;
+        semesterId?: string | undefined;
+    }
+) => {
+    if (!filter.semesterId) {
+        const currentSemester = await prisma.semester.findFirst({
+            where: {
+                isCurrent: true,
+            },
+        });
+
+        filter.semesterId = currentSemester?.id;
+    }
+
+    const studentEnrolledCourses = await findMyCourses(authUserId, filter);
+    const studentEnrolledCourseIds = studentEnrolledCourses.map((item) => item.courseId);
+    const result = await prisma.studentSemesterRegistrationCourse.findMany({
+        where: {
+            student: {
+                studentId: authUserId,
+            },
+            semesterRegistration: {
+                semester: {
+                    id: filter.semesterId,
+                },
+            },
+            offeredCourse: {
+                course: {
+                    id: {
+                        in: studentEnrolledCourseIds,
+                    },
+                },
+            },
+        },
+        include: {
+            offeredCourse: {
+                include: {
+                    course: true,
+                },
+            },
+            offeredCourseSection: {
+                include: {
+                    offeredCourseClassSchedules: {
+                        include: {
+                            room: {
+                                include: {
+                                    building: true,
+                                },
+                            },
+                            faculty: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    return result;
+};
+
+export const findMyAcademicInfo = async (authUserId: string): Promise<any> => {
+    const academicInfo = await prisma.studentAcademicInfo.findFirst({
+        where: {
+            student: {
+                studentId: authUserId,
+            },
+        },
+    });
+
+    const enrolledCourses = await prisma.studentEnrolledCourse.findMany({
+        where: {
+            student: {
+                studentId: authUserId,
+            },
+            status: StudentEnrolledCourseStatus.COMPLETED,
+        },
+        include: {
+            course: true,
+            semester: true,
+        },
+        orderBy: {
+            createdAt: 'asc',
+        },
+    });
+
+    const groupByAcademicSemesterData = groupBySemester(enrolledCourses);
+
+    return {
+        academicInfo,
+        courses: groupByAcademicSemesterData,
+    };
 };
