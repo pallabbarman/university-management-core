@@ -1,9 +1,11 @@
 import { Server } from 'http';
 import { errorLogger, logger } from 'utils/logger';
+import redisConnect from 'utils/redis';
 import app from './app';
 import configs from './configs';
 
 const startServer = async () => {
+    await redisConnect();
     const server: Server = app.listen(configs.port, () => {
         logger.info(`Server running on port ${configs.port || 5002}`);
     });
