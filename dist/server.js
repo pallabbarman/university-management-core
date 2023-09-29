@@ -8,7 +8,7 @@ const app_1 = __importDefault(require("./app"));
 const configs_1 = __importDefault(require("./configs"));
 const startServer = async () => {
     const server = app_1.default.listen(configs_1.default.port, () => {
-        logger_1.logger.info(`Server running on port ${configs_1.default.port || 5000}`);
+        logger_1.logger.info(`Server running on port ${configs_1.default.port || 5002}`);
     });
     const exitHandler = () => {
         if (server) {
@@ -24,11 +24,5 @@ const startServer = async () => {
     };
     process.on('uncaughtException', unexpectedErrorHandler);
     process.on('unhandledRejection', unexpectedErrorHandler);
-    process.on('SIGTERM', () => {
-        logger_1.logger.info('SIGTERM is received');
-        if (server) {
-            server.close();
-        }
-    });
 };
 startServer();

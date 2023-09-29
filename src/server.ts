@@ -5,7 +5,7 @@ import configs from './configs';
 
 const startServer = async () => {
     const server: Server = app.listen(configs.port, () => {
-        logger.info(`Server running on port ${configs.port || 5000}`);
+        logger.info(`Server running on port ${configs.port || 5002}`);
     });
 
     const exitHandler = () => {
@@ -24,13 +24,6 @@ const startServer = async () => {
 
     process.on('uncaughtException', unexpectedErrorHandler);
     process.on('unhandledRejection', unexpectedErrorHandler);
-
-    process.on('SIGTERM', () => {
-        logger.info('SIGTERM is received');
-        if (server) {
-            server.close();
-        }
-    });
 };
 
 startServer();

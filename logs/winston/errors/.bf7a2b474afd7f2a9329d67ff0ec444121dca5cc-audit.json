@@ -6,24 +6,9 @@
     "auditLog": "D:\\Web Development\\Next Level\\UM\\logs\\winston\\errors\\.bf7a2b474afd7f2a9329d67ff0ec444121dca5cc-audit.json",
     "files": [
         {
-            "date": 1695464737797,
-            "name": "D:\\Web Development\\Next Level\\UM\\logs\\winston\\errors\\error-2023-09-23-16.log",
-            "hash": "df6110f8cf30445bdf838cbe633a23a071c0f6a806c3536de9fba0407cb9c475"
-        },
-        {
-            "date": 1695467098185,
-            "name": "D:\\Web Development\\Next Level\\UM\\logs\\winston\\errors\\error-2023-09-23-17.log",
-            "hash": "4e3c562842c84f6ebf2b9e2baa1de9c50bddc0eb06ba76182eb197e1ec28e878"
-        },
-        {
-            "date": 1695564558356,
-            "name": "D:\\Web Development\\Next Level\\UM\\logs\\winston\\errors\\error-2023-09-24-20.log",
-            "hash": "1617f61c1b1705837d4ba43f4eba796bec9bafe468bbf93828d438fbc233769c"
-        },
-        {
-            "date": 1695828968950,
-            "name": "D:\\Web Development\\Next Level\\UM\\logs\\winston\\errors\\error-2023-09-27-21.log",
-            "hash": "946a1bc4b85c38783bf05b5939fbed9325a5f5ae129bd6d62196bdc030d607ae"
+            "date": 1695973499915,
+            "name": "D:\\Web Development\\Next Level\\UM\\logs\\winston\\errors\\error-2023-09-29-13.log",
+            "hash": "f8cf6af4b6b4ab61f4a97c854cb99b1e6b5c2e58b05836cf3e7ba4b1d8507816"
         }
     ],
     "hashType": "sha256"
