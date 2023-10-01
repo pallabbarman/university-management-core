@@ -16,7 +16,12 @@ const router = Router();
 
 router.get('/', getAllSemesters);
 router.get('/:id', getSemester);
-router.post('/', validateRequest(semesterValidation), createSemester);
+router.post(
+    '/',
+    validateRequest(semesterValidation),
+    auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    createSemester
+);
 router.patch(
     '/:id',
     validateRequest(updateSemesterValidation),
