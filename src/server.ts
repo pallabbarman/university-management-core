@@ -5,7 +5,7 @@ import envConfig from './configs';
 
 const startServer = async () => {
     const server: Server = app.listen(envConfig.port, () => {
-        logger.info(`Server running on port ${envConfig.port || 5000}`);
+        logger.info(`Server running on port ${envConfig.port || 5002}`);
     });
 
     const exitHandler = () => {
