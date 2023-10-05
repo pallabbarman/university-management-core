@@ -13,7 +13,7 @@ const validation_1 = require("./validation");
 const router = (0, express_1.Router)();
 router.get('/', controller_1.getAllCourses);
 router.get('/:id', controller_1.getCourse);
-router.post('/create-course', (0, validateRequest_1.default)(validation_1.courseValidation), (0, auth_1.default)(user_1.USER_ROLE.ADMIN, user_1.USER_ROLE.SUPER_ADMIN), controller_1.createCourse);
+router.post('/', (0, validateRequest_1.default)(validation_1.courseValidation), (0, auth_1.default)(user_1.USER_ROLE.ADMIN, user_1.USER_ROLE.SUPER_ADMIN), controller_1.createCourse);
 router.patch('/:id', (0, validateRequest_1.default)(validation_1.updateCourseValidation), (0, auth_1.default)(user_1.USER_ROLE.ADMIN, user_1.USER_ROLE.SUPER_ADMIN), controller_1.updateCourse);
 router.delete('/:id', (0, auth_1.default)(user_1.USER_ROLE.ADMIN, user_1.USER_ROLE.SUPER_ADMIN), controller_1.deleteCourse);
 router.post('/:id/assign-faculties', (0, validateRequest_1.default)(validation_1.facultiesValidation), (0, auth_1.default)(user_1.USER_ROLE.ADMIN, user_1.USER_ROLE.SUPER_ADMIN), controller_1.assignFaculties);

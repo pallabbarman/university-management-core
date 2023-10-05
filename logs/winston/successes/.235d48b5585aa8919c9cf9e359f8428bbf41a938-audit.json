@@ -6,9 +6,9 @@
     "auditLog": "D:\\Pallab\\university-management-core\\logs\\winston\\successes\\.235d48b5585aa8919c9cf9e359f8428bbf41a938-audit.json",
     "files": [
         {
-            "date": 1696477124292,
-            "name": "D:\\Pallab\\university-management-core\\logs\\winston\\successes\\success-2023-10-05-09.log",
-            "hash": "1c1a3276ff3f49911b379e2b0f31876cce85e4a8592893fb4d2834997ae2f1cd"
+            "date": 1696481649466,
+            "name": "D:\\Pallab\\university-management-core\\logs\\winston\\successes\\success-2023-10-05-10.log",
+            "hash": "66264a4db4107489086571c11fda598a2385ff9ec54a789493a2f674cce40fd2"
         }
     ],
     "hashType": "sha256"

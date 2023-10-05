@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteStudent = exports.updateStudent = exports.getStudent = exports.getAllStudents = exports.createStudent = void 0;
+exports.myAcademicInfo = exports.getMyCourseSchedules = exports.myCourses = exports.deleteStudent = exports.updateStudent = exports.getStudent = exports.getAllStudents = exports.createStudent = void 0;
 /* eslint-disable object-curly-newline */
 const pagination_1 = __importDefault(require("../../constants/pagination"));
 const http_status_1 = __importDefault(require("http-status"));
@@ -60,6 +60,38 @@ exports.deleteStudent = (0, catchAsync_1.default)(async (req, res) => {
         statusCode: http_status_1.default.OK,
         success: true,
         message: 'Student is deleted successfully!',
+        data: result,
+    });
+});
+exports.myCourses = (0, catchAsync_1.default)(async (req, res) => {
+    const { user } = req;
+    const filter = (0, pick_1.default)(req.query, ['courseId', 'semesterId']);
+    const result = await (0, service_1.findMyCourses)(user.userId, filter);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Student Courses data fetched successfully',
+        data: result,
+    });
+});
+exports.getMyCourseSchedules = (0, catchAsync_1.default)(async (req, res) => {
+    const { user } = req;
+    const filter = (0, pick_1.default)(req.query, ['courseId', 'semesterId']);
+    const result = await (0, service_1.findMyCourseSchedules)(user.userId, filter);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Course Schedules data fetched successfully',
+        data: result,
+    });
+});
+exports.myAcademicInfo = (0, catchAsync_1.default)(async (req, res) => {
+    const { user } = req;
+    const result = await (0, service_1.findMyAcademicInfo)(user.userId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'My Academic Info data fetched successfully',
         data: result,
     });
 });

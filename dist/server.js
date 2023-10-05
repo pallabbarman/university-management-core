@@ -4,9 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const logger_1 = require("./utils/logger");
+const redis_1 = __importDefault(require("./utils/redis"));
 const app_1 = __importDefault(require("./app"));
 const configs_1 = __importDefault(require("./configs"));
 const startServer = async () => {
+    await (0, redis_1.default)();
     const server = app_1.default.listen(configs_1.default.port, () => {
         logger_1.logger.info(`Server running on port ${configs_1.default.port || 5002}`);
     });
@@ -24,11 +26,5 @@ const startServer = async () => {
     };
     process.on('uncaughtException', unexpectedErrorHandler);
     process.on('unhandledRejection', unexpectedErrorHandler);
-    process.on('SIGTERM', () => {
-        logger_1.logger.info('SIGTERM is received');
-        if (server) {
-            server.close();
-        }
-    });
 };
 startServer();

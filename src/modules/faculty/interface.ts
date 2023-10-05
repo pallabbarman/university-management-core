@@ -8,3 +8,9 @@ export interface IFacultyFilters {
     bloodGroup?: string;
     designation?: string;
 }
+
+export type IFacultyMyCourseStudents = {
+    semesterId?: string;
+    courseId?: string;
+    offeredCourseSectionId?: string;
+};

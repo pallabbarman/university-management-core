@@ -8,11 +8,18 @@ import pick from 'utils/pick';
 import sendResponse from 'utils/sendResponse';
 import { semesterRegistrationFilterableFields } from './constant';
 import {
+    beginMyRegistration,
+    beginNewSemester,
+    drawOutFromCourse,
     editSemesterRegistration,
     findAllSemesterRegistration,
+    findMyRegistration,
+    findMySemesterRegCourses,
     findSemesterRegistration,
     insertSemesterRegistration,
+    joinIntoCourse,
     removeSemesterRegistration,
+    verifyMyRegistration,
 } from './service';
 
 export const createSemesterRegistration = catchAsync(async (req: Request, res: Response) => {
@@ -76,6 +83,96 @@ export const deleteSemesterRegistration = catchAsync(async (req: Request, res: R
         statusCode: httpStatus.OK,
         success: true,
         message: 'Semester Registration deleted successfully!',
+        data: result,
+    });
+});
+
+export const startMyRegistration = catchAsync(async (req: Request, res: Response) => {
+    const { user } = req;
+
+    const result = await beginMyRegistration(user.userId);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Student semester registration started successfully',
+        data: result,
+    });
+});
+
+export const enrollIntoCourse = catchAsync(async (req: Request, res: Response) => {
+    const { user } = req;
+
+    const result = await joinIntoCourse(user.userId, req.body);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Student semester registration course enrolled successfully',
+        data: result,
+    });
+});
+
+export const withdrawFromCourse = catchAsync(async (req: Request, res: Response) => {
+    const { user } = req;
+
+    const result = await drawOutFromCourse(user.userId, req.body);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Student Withdraw from successfully',
+        data: result,
+    });
+});
+
+export const confirmMyRegistration = catchAsync(async (req: Request, res: Response) => {
+    const { user } = req;
+
+    const result = await verifyMyRegistration(user.userId);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Confirm your registration!',
+        data: result,
+    });
+});
+
+export const getMyRegistration = catchAsync(async (req: Request, res: Response) => {
+    const { user } = req;
+
+    const result = await findMyRegistration(user.userId);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'My registration data fetched!',
+        data: result,
+    });
+});
+
+export const startNewSemester = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const result = await beginNewSemester(id);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Semester Started Successfully!',
+        data: result,
+    });
+});
+
+export const getMySemesterRegCourses = catchAsync(async (req: Request, res: Response) => {
+    const { user } = req;
+
+    const result = await findMySemesterRegCourses(user.userId);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'My registration courses data fetched!',
         data: result,
     });
 });

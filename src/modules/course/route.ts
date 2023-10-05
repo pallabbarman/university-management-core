@@ -19,7 +19,7 @@ const router = Router();
 router.get('/', getAllCourses);
 router.get('/:id', getCourse);
 router.post(
-    '/create-course',
+    '/',
     validateRequest(courseValidation),
     auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     createCourse

@@ -1,6 +1,6 @@
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable operator-linebreak */
-import envConfig from 'configs/index';
+import configs from 'configs/index';
 import ApiError from 'errors/apiError';
 import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
@@ -20,7 +20,7 @@ const auth =
             // verify token
             let verifiedUser = null;
 
-            verifiedUser = verifyToken(token, envConfig.jwt.secret as Secret);
+            verifiedUser = verifyToken(token, configs.jwt.secret as Secret);
 
             req.user = verifiedUser; // role , userId
 

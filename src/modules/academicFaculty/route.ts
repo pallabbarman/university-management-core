@@ -1,6 +1,8 @@
 /* eslint-disable comma-dangle */
 import { Router } from 'express';
+import auth from 'middlewares/auth';
 import validateRequest from 'middlewares/validateRequest';
+import { USER_ROLE } from 'types/user';
 import {
     createAcademicFaculty,
     deleteAcademicFaculty,
@@ -15,12 +17,18 @@ const router = Router();
 router.get('/', getAllAcademicFaculties);
 router.get('/:id', getAcademicFaculty);
 router.post(
-    '/create-academic-faculty',
+    '/',
     validateRequest(academicFacultyValidation),
+    auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     createAcademicFaculty
 );
-router.patch('/:id', validateRequest(updateAcademicFacultyValidation), updateAcademicFaculty);
-router.delete('/:id', deleteAcademicFaculty);
+router.patch(
+    '/:id',
+    validateRequest(updateAcademicFacultyValidation),
+    auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    updateAcademicFaculty
+);
+router.delete('/:id', auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN), deleteAcademicFaculty);
 
 const academicFacultyRoutes = router;
 
