@@ -4,13 +4,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeSemester = exports.editSemester = exports.findSemester = exports.findAllSemesters = exports.insertSemester = void 0;
+const apiError_1 = __importDefault(require("../../errors/apiError"));
+const http_status_1 = __importDefault(require("http-status"));
 const pagination_1 = __importDefault(require("../../utils/pagination"));
 const prisma_1 = __importDefault(require("../../utils/prisma"));
+const redis_1 = require("../../utils/redis");
 const constant_1 = require("./constant");
 const insertSemester = async (data) => {
+    if (constant_1.semesterTitleCodeMapper[data.title] !== data.code) {
+        throw new apiError_1.default(http_status_1.default.BAD_REQUEST, 'Invalid semester code!');
+    }
     const result = await prisma_1.default.semester.create({
         data,
     });
+    if (result) {
+        await redis_1.RedisClient.publish(constant_1.EVENT_SEMESTER_CREATED, JSON.stringify(result));
+    }
     return result;
 };
 exports.insertSemester = insertSemester;
@@ -77,6 +86,9 @@ const editSemester = async (id, payload) => {
         },
         data: payload,
     });
+    if (result) {
+        await redis_1.RedisClient.publish(constant_1.EVENT_SEMESTER_UPDATED, JSON.stringify(result));
+    }
     return result;
 };
 exports.editSemester = editSemester;
@@ -86,6 +98,9 @@ const removeSemester = async (id) => {
             id,
         },
     });
+    if (result) {
+        await redis_1.RedisClient.publish(constant_1.EVENT_SEMESTER_DELETED, JSON.stringify(result));
+    }
     return result;
 };
 exports.removeSemester = removeSemester;

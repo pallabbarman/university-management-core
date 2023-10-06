@@ -3,17 +3,34 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable object-curly-newline */
 import { Prisma, Semester } from '@prisma/client';
+import ApiError from 'errors/apiError';
+import httpStatus from 'http-status';
 import { IPaginationOptions } from 'types/pagination';
 import { IGenericResponse } from 'types/response';
 import calculatePagination from 'utils/pagination';
 import prisma from 'utils/prisma';
-import { semesterSearchAbleFields } from './constant';
+import { RedisClient } from 'utils/redis';
+import {
+    EVENT_SEMESTER_CREATED,
+    EVENT_SEMESTER_DELETED,
+    EVENT_SEMESTER_UPDATED,
+    semesterSearchAbleFields,
+    semesterTitleCodeMapper,
+} from './constant';
 import { ISemesterFilters } from './interface';
 
 export const insertSemester = async (data: Semester): Promise<Semester> => {
+    if (semesterTitleCodeMapper[data.title] !== data.code) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid semester code!');
+    }
+
     const result = await prisma.semester.create({
         data,
     });
+
+    if (result) {
+        await RedisClient.publish(EVENT_SEMESTER_CREATED, JSON.stringify(result));
+    }
 
     return result;
 };
@@ -94,6 +111,10 @@ export const editSemester = async (id: string, payload: Partial<Semester>): Prom
         data: payload,
     });
 
+    if (result) {
+        await RedisClient.publish(EVENT_SEMESTER_UPDATED, JSON.stringify(result));
+    }
+
     return result;
 };
 
@@ -103,6 +124,10 @@ export const removeSemester = async (id: string): Promise<Semester> => {
             id,
         },
     });
+
+    if (result) {
+        await RedisClient.publish(EVENT_SEMESTER_DELETED, JSON.stringify(result));
+    }
 
     return result;
 };
